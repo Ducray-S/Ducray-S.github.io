@@ -1,0 +1,55 @@
+Validation.addAllThese([
+                           [
+                               'validate-phoneInternationalReact', 'validation.form.phone_international', function (a) {
+                               return Validation.get('IsEmpty').test(a)
+                                   || window.document.getReactComponent('Phone').validate(a)
+                           }
+                           ],
+                           [
+                               'validate-password',
+                               'customer.validation.password',
+                               function (v) {
+                                   var value = v.trim();
+
+                                   return (
+                                       Validator.methods.pattern(value, null, /[a-z]/)
+                                       && Validator.methods.pattern(value, null, /[A-Z]/)
+                                       && Validator.methods.pattern(value, null, /[0-9]/)
+                                   );
+                               },
+                               {minLength: 8}
+                           ],
+                           [
+                               'validate-admin-customer-password',
+                               'customer.validation.password',
+                               function (v) {
+                                   var value = v.trim();
+
+                                   return (
+                                       Validator.methods.pattern(value, null, /[a-z]/)
+                                       && Validator.methods.pattern(value, null, /[A-Z]/)
+                                       && Validator.methods.pattern(value, null, /[0-9]/)
+                                   );
+                               },
+                               {minLength: 8}
+                           ],
+                           [
+                               'validate-new-client-password', 'customer.validation.password', function (v, elm) {
+                               if (! Validation.get('validate-admin-customer-password').test(v, elm)) {
+                                   return false;
+                               }
+                               if (Validation.get('IsEmpty').test(v) && v != '') {
+                                   return false;
+                               }
+                               return true;
+                           }
+                           ],
+                           [
+                               'validate-new-password', 'customer.validation.password', function (v) {
+                               return (
+                                   Validation.get('isEmpty').test(v.trim())
+                                   || Validation.get('validate-password').test(v)
+                               );
+                           }
+                           ],
+                       ]);
